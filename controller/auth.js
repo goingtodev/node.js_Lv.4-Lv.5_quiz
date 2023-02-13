@@ -1,4 +1,5 @@
 import * as userRepository from '../model/auth.js';
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -13,15 +14,15 @@ export async function signup(req, res) {
       .status(412)
       .json({ errorMessage: '닉네임의 형식이 일치하지 않습니다.' });
   }
-  if (password.search(nickname) > -1) {
-    return res
-      .status(412)
-      .json({ errorMessage: '패스워드에 닉네임이 포함되어 있습니다.' });
-  }
   if (password !== confirm) {
     return res
       .status(412)
       .json({ errorMessage: '패스워드가 일치하지 않습니다.' });
+  }
+  if (password.search(nickname) > -1) {
+    return res
+      .status(412)
+      .json({ errorMessage: '패스워드에 닉네임이 포함되어 있습니다.' });
   }
   const nicknameOverlap = await userRepository.findByUsername(nickname);
   if (nicknameOverlap !== null) {
@@ -32,7 +33,38 @@ export async function signup(req, res) {
     nickname,
     password,
   });
-  res.status(200).json({ message: '회원가입에 성공하셨습니다.' });
+  res.status(201).json({ message: '회원 가입에 성공하였습니다.' });
 }
 
 // 로그인
+export async function login(req, res) {
+  const { nickname, password } = req.body;
+  const user = await userRepository.findByUsername(nickname);
+  if (!user) {
+    return res
+      .status(412)
+      .json({ errorMessage: '닉네임 또는 패스워드를 확인해주세요' });
+  }
+  const isValidPassword = await user.password.includes(password);
+  if (!isValidPassword) {
+    return res
+      .status(402)
+      .json({ errorMessage: '닉네임 또는 패스워드를 확인해주세요.' });
+  }
+
+  // 토큰 response
+  const crtoken = createJwtToken(user.userId);
+  const slicetoken1 = crtoken.slice(0, 10);
+  const slicetoken2 = crtoken
+    .slice(10, 20)
+    .replace(/^[a-z0-9_]{4,20}$/gi, '**********');
+  const token = slicetoken1 + slicetoken2;
+  res.cookie('Authorization', `Bearer ${crtoken}`);
+  res.json({ token: token });
+}
+
+// token 생성
+const secretKey = process.env.SECRETKEY;
+function createJwtToken(userId) {
+  return jwt.sign({ userId }, secretKey);
+}
