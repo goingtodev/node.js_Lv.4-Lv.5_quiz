@@ -1,5 +1,5 @@
 import SQ from 'sequelize';
-import { sequelize } from '/database.js';
+import { sequelize } from '../model/database.js';
 const DataTypes = SQ.DataTypes;
 
 export const User = sequelize.define(

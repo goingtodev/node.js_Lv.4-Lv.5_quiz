@@ -1,7 +1,7 @@
 import express from 'express';
 import authRoute from './routes/auth.js';
 import postRoute from './routes/posts.js';
-import { sequelize } from './db/database.js';
+import { sequelize } from './model/database.js';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 dotenv.config();
