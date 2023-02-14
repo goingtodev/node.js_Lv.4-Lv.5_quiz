@@ -66,7 +66,7 @@ const ORDER_DESC = {
 
 //게시글 작성
 export async function create(content, title, userId) {
-  return Posts.create({ content, title, userId }).then((data) =>
+  return Posts.create({ content, title, userUserId: userId }).then((data) =>
     Posts.findByPk(data.dataValues.postId)
   );
 }

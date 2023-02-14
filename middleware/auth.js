@@ -14,7 +14,7 @@ export const isAuth = async (req, res, next) => {
 
   // 1. authType === Bearer 값인지 확인하기
   // 2. authToken 존재 유무 검증하기
-  if (authType !== Bearer || !authToken) {
+  if (authType !== 'Bearer' || !authToken) {
     res.status(400).json({
       errorMessage: '로그인 후에 이용할 수 있는 기능입니다.',
     });
@@ -33,8 +33,13 @@ export const isAuth = async (req, res, next) => {
 
     // authToken에 있는 userId에 해당하는 사용자가 실제 DB에 존재하는지 확인
     const decodedToken = jwt.decode(authToken);
-    console.log(decodedToken);
     const test = await User.findByPk(decodedToken.userId);
+    if (test == null) {
+      return res
+        .status(403)
+        .json({ errorMessage: '계정이 존재하지 않습니다.' });
+    }
+    next();
   } catch (error) {
     console.error(error);
     res
