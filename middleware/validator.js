@@ -4,7 +4,7 @@ import { body } from 'express-validator';
 // 닉네임 패스워드 검사
 const validateCredential = [
   body('nickname')
-    .trim()
+    .trim() // 공백 제거
     .notEmpty()
     .isLength({ min: 3 })
     .withMessage('nickname should be at least 3 characters'),
