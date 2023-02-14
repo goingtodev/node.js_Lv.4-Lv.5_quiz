@@ -18,8 +18,8 @@ app.use(cookieParser());
 const connection = process.env;
 
 // 미들웨어 연결
-app.use('/posts', postRoute);
 app.use('/', authRoute);
+app.use('/posts', postRoute);
 
 // db연결
 sequelize.sync({ force: false }).then(() => {
