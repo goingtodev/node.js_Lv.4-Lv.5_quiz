@@ -22,11 +22,3 @@ export const User = sequelize.define(
   },
   { timestamps: false }
 );
-
-export async function createUser(users) {
-  return User.create(users).then((data) => data.dataValues.userId);
-}
-
-export async function findByUsername(nickname) {
-  return User.findOne({ where: { nickname: nickname } });
-}
