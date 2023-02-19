@@ -4,8 +4,8 @@ import { User } from './auth.js';
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
 
-const Posts = sequelize.define(
-  'post',
+export const Posts = sequelize.define(
+  'posts',
   {
     postId: {
       type: DataTypes.INTEGER,
@@ -27,7 +27,7 @@ const Posts = sequelize.define(
 Posts.belongsTo(User);
 
 //전체조회
-const INCLUDE_USER = {
+export const INCLUDE_USER = {
   attributes: [
     'postId',
     [Sequelize.col('User.userId'), 'userId'],
@@ -43,7 +43,7 @@ const INCLUDE_USER = {
 };
 
 //상세조회
-const DETAIL_USER = {
+export const DETAIL_USER = {
   attributes: [
     'postId',
     [Sequelize.col('User.userId'), 'userId'],
@@ -60,48 +60,6 @@ const DETAIL_USER = {
 };
 
 //정리
-const ORDER_DESC = {
-  order: [['createdAt', 'DESC']],
+export const ORDER_DESC = {
+  order: [['postId', 'DESC']],
 };
-
-//게시글 작성
-export async function create(content, title, userId) {
-  return Posts.create({ content, title, userUserId: userId }).then((data) =>
-    Posts.findByPk(data.dataValues.postId)
-  );
-}
-
-//게시글 조회
-export async function getAll() {
-  return Posts.findAll({ ...INCLUDE_USER, ...ORDER_DESC });
-}
-
-//닉네임 찾기
-export async function findByUserName(nickname) {
-  return User.findOne({ where: { nickname: nickname } });
-}
-
-//게시글 상세찾기
-export async function getById(postId) {
-  return Posts.findOne({
-    where: { postId },
-    ...DETAIL_USER,
-  });
-}
-
-//게시글 수정
-export async function update(postId, title, content) {
-  return Posts.findByPk(postId, DETAIL_USER) //
-    .then((post) => {
-      (post.title = title), (post.content = content);
-      return post.save();
-    });
-}
-
-//게시글 삭제
-export async function remove(postId) {
-  return Posts.findByPk(postId) //
-    .then((post) => {
-      post.destroy();
-    });
-}

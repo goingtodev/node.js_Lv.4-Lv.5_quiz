@@ -4,7 +4,6 @@ class AuthRepository {
   createUser = async (nickname, password) => {
     return User.create({ nickname, password });
   };
-
   findByUsername = async (nickname) => {
     return User.findOne({ where: { nickname: nickname } });
   };
