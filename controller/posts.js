@@ -8,7 +8,7 @@ class PostController {
     await this.postService.createPostService(req, res, title, content);
   };
 
-  getAllPost = async (req, res) => {
+  getAllPost = async (_, res) => {
     await this.postService.getAllPostService(res);
   };
 

@@ -1,6 +1,7 @@
 import SQ from 'sequelize';
 import { sequelize } from './database.js';
 import { User } from './auth.js';
+import { Likes } from './likes.js';
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
 
@@ -25,6 +26,7 @@ export const Posts = sequelize.define(
   { timestamps: true }
 );
 Posts.belongsTo(User);
+Posts.hasMany(Likes, { as: 'lk' });
 
 //전체조회
 export const INCLUDE_USER = {
@@ -62,4 +64,28 @@ export const DETAIL_USER = {
 //정리
 export const ORDER_DESC = {
   order: [['postId', 'DESC']],
+};
+
+export const LIKE_USER = {
+  attributes: [
+    'postId',
+    [Sequelize.col('User.userId'), 'userId'],
+    [Sequelize.col('User.nickname'), 'nickname'],
+    'title',
+    'content',
+    'createdAt',
+    'updatedAt',
+    [sequelize.fn('COUNT', sequelize.col('lk.likeId')), 'likes'],
+  ],
+  include: [
+    {
+      model: User,
+      attributes: [],
+    },
+    {
+      model: Likes,
+      as: 'lk',
+      attributes: [],
+    },
+  ],
 };

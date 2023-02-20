@@ -1,4 +1,5 @@
 import express from 'express';
+import likeRoute from './routes/likes.js';
 import authRoute from './routes/auth.js';
 import postRoute from './routes/posts.js';
 import commentRoute from './routes/comments.js';
@@ -19,6 +20,7 @@ app.use(cookieParser());
 const connection = process.env;
 
 // 미들웨어 연결
+app.use('/', likeRoute);
 app.use('/', authRoute);
 app.use('/posts', postRoute);
 app.use('/posts/:postId', commentRoute);
