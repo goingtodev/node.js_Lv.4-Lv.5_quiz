@@ -1,7 +1,7 @@
 {
-  "name": "node_mysql",
+  "name": "node.js_lv.4-5_quiz",
   "version": "1.0.0",
-  "description": "",
+  "description": "upgrade lv.2_quiz",
   "main": "app.js",
   "type": "module",
   "scripts": {

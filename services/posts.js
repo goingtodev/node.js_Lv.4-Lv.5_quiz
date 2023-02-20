@@ -14,7 +14,7 @@ class PostService {
 
   getAllPostService = async (res) => {
     const data = await this.postRepository.getAll();
-    return res.staus(200).json({ posts: [data] });
+    return res.status(200).json({ posts: [data] });
   };
 
   getDetailPostService = async (res, postId) => {

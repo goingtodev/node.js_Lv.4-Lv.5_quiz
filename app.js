@@ -1,6 +1,7 @@
 import express from 'express';
 import authRoute from './routes/auth.js';
 import postRoute from './routes/posts.js';
+import commentRoute from './routes/comments.js';
 import { sequelize } from './model/database.js';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
@@ -20,6 +21,7 @@ const connection = process.env;
 // 미들웨어 연결
 app.use('/', authRoute);
 app.use('/posts', postRoute);
+app.use('/posts/:postId', commentRoute);
 
 // db연결
 sequelize.sync({ force: false }).then(() => {
