@@ -4,13 +4,11 @@ class AuthController {
   authService = new AuthService();
 
   signup = async (req, res) => {
-    const { nickname, password, confirm } = req.body;
-    await this.authService.createUserService(nickname, password, confirm, res);
+    return await this.authService.createUserService(req, res);
   };
 
   login = async (req, res) => {
-    const { nickname, password } = req.body;
-    await this.authService.loginUserService(nickname, password, res);
+    return await this.authService.loginUserService(req, res);
   };
 }
 

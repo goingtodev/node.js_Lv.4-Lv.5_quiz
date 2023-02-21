@@ -13,6 +13,6 @@ export const Likes = sequelize.define(
       primaryKey: true,
     },
   },
-  { timestamps: true }
+  { timestamps: false }
 );
 Likes.belongsTo(User);

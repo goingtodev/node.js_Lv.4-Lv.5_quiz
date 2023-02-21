@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken';
 class PostService {
   postRepository = new PostRepository();
 
-  createPostService = async (req, res, title, content) => {
+  createPostService = async (req, res) => {
+    const { title, content } = req.body;
     const token = req.cookies.Authorization;
     const splitedToken = token.split(' ')[1];
     const decodedToken = jwt.decode(splitedToken);
@@ -12,12 +13,13 @@ class PostService {
     return res.status(201).json({ message: '게시글 작성에 성공하였습니다.' });
   };
 
-  getAllPostService = async (res) => {
+  getAllPostService = async (_, res) => {
     const data = await this.postRepository.getAll();
     return res.status(200).json({ posts: [data] });
   };
 
-  getDetailPostService = async (res, postId) => {
+  getDetailPostService = async (req, res) => {
+    const { postId } = req.params;
     const findId = await this.postRepository.getById(postId);
     if (findId !== null) {
       return res.status(200).json({ post: findId });
@@ -28,7 +30,9 @@ class PostService {
     }
   };
 
-  updatePostService = async (req, res, title, content, postId) => {
+  updatePostService = async (req, res) => {
+    const { postId } = req.params;
+    const { title, content } = req.body;
     const token = req.cookies.Authorization;
     const splitedToken = token.split(' ')[1];
     const decodedToken = jwt.decode(splitedToken);
@@ -47,7 +51,8 @@ class PostService {
     return res.status(200).json({ message: '게시글을 수정하였습니다.' });
   };
 
-  deletePostService = async (req, res, postId) => {
+  deletePostService = async (req, res) => {
+    const { postId } = req.params;
     const token = req.cookies.Authorization;
     const splitedToken = token.split(' ')[1];
     const decodedToken = jwt.decode(splitedToken);

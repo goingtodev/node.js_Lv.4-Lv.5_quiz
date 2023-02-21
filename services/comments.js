@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken';
 class CommentService {
   commentRepository = new CommentRepository();
 
-  createCommentService = async (req, res, comment) => {
+  createCommentService = async (req, res) => {
+    const { comment } = req.body;
     const token = req.cookies.Authorization;
     const splitedToken = token.split(' ')[1];
     const decodedToken = jwt.decode(splitedToken);
@@ -12,12 +13,14 @@ class CommentService {
     return res.status(201).json({ message: '댓글 작성에 성공하였습니다.' });
   };
 
-  getAllCommentService = async (res) => {
+  getAllCommentService = async (_, res) => {
     const data = await this.commentRepository.commentGetAll();
     return res.status(200).json({ comments: [data] });
   };
 
-  updateCommentService = async (req, res, comment, commentId) => {
+  updateCommentService = async (req, res) => {
+    const { commentId } = req.params;
+    const { comment } = req.body;
     const token = req.cookies.Authorization;
     const splitedToken = token.split(' ')[1];
     const decodedToken = jwt.decode(splitedToken);
@@ -36,7 +39,8 @@ class CommentService {
     return res.status(200).json({ message: '댓글을 수정하였습니다.' });
   };
 
-  deleteCommentService = async (req, res, commentId) => {
+  deleteCommentService = async (req, res) => {
+    const { commentId } = req.params;
     const token = req.cookies.Authorization;
     const splitedToken = token.split(' ')[1];
     const decodedToken = jwt.decode(splitedToken);

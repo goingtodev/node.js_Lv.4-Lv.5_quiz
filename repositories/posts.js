@@ -26,7 +26,7 @@ class PostRepository {
     });
   };
   postRemove = async (postId) => {
-    return Posts.findByPk(postId).then((post) => {
+    return await Posts.findByPk(postId).then((post) => {
       return post.destroy();
     });
   };

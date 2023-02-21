@@ -12,8 +12,10 @@ class LikeRepository {
     });
   };
 
-  findPostinLike = async (postId) => {
-    return await Likes.findOne({ postPostId: postId });
+  findPostinLike = async (postId, userId) => {
+    return await Likes.findOne({
+      where: { postPostId: postId, userUserId: userId },
+    });
   };
   getById = async (postId) => {
     return await Posts.findByPk(postId);
