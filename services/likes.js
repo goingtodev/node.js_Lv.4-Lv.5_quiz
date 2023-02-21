@@ -29,11 +29,6 @@ class LikeService {
         .json({ errorMessage: ' 게시글이 존재하지 않습니다.' });
     }
 
-    if (postFind.dataValues.userUserId != decodedToken.userId) {
-      return res
-        .status(403)
-        .json({ errorMessage: '로그인이 필요한 기능입니다.' });
-    }
     const isLike = await this.likeRepository.findPostinLike(
       postId,
       decodedToken.userId
